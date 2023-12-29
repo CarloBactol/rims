@@ -32,18 +32,18 @@ class HomeController extends Controller
     {
         // In your controller, fetch data from the database
         // postgresql
-        $residentsData = DB::table('residents')
-            ->select(DB::raw("to_char(created_at, 'YYYY-MM') as month"), DB::raw('COUNT(*) as total'))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get();
-
-        // mysql
         // $residentsData = DB::table('residents')
-        //     ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('COUNT(*) as total'))
+        //     ->select(DB::raw("to_char(created_at, 'YYYY-MM') as month"), DB::raw('COUNT(*) as total'))
         //     ->groupBy('month')
         //     ->orderBy('month')
         //     ->get();
+
+        // mysql
+        $residentsData = DB::table('residents')
+            ->select(DB::raw("DATE_FORMAT(created_at, '%Y-%m') as month"), DB::raw('COUNT(*) as total'))
+            ->groupBy('month')
+            ->orderBy('month')
+            ->get();
 
         $residentsData->transform(function ($item) {
             $item->month = Carbon::createFromFormat('Y-m', $item->month)->format('M Y');
